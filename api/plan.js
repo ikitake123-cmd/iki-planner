@@ -10,36 +10,16 @@ export default async function handler(req, res) {
 
   const { spots, transport, days, people } = req.body;
 
-  const prompt = `あなたは壱岐島専門の旅行プランナーです。以下の条件で現実的で楽しい旅程を提案してください。
+  const prompt = `あなたは壱岐島専門の旅行プランナーです。以下の条件で旅程を提案してください。
 
-【条件】
-- 選択スポット: ${spots.map(s => `${s.name}（${s.area}エリア、所要約${s.time}分、入場料¥${s.fee}）`).join('、')}
+条件:
+- スポット: ${spots.map(s => `${s.name}(${s.area},${s.time}分,¥${s.fee})`).join('、')}
 - 移動手段: ${transport}
 - 日数: ${days}
 - 人数: ${people}名
 
-【出力形式】JSONのみ返してください。説明文・マークダウン記法・コードブロック不要。
-
-{
-  "summary": "プランの一言説明（25字以内）",
-  "totalTime": "合計所要時間",
-  "days": [
-    {
-      "day": 1,
-      "title": "その日のテーマ（10字以内）",
-      "spots": [
-        {"time": "09:00", "name": "スポット名", "detail": "ひとことメモ（20字以内）", "duration": "約XX分"}
-      ]
-    }
-  ],
-  "costs": {
-    "transport": "移動費概算（1名）",
-    "admission": "入場料合計（1名）",
-    "meal": "食事代概算（1名）",
-    "total": "合計目安（${people}名分）"
-  },
-  "tips": "旅のコツひとこと（40字以内）"
-}`;
+以下のJSONを返してください。JSONのみ、余分なテキストなし:
+{"summary":"説明25字以内","totalTime":"合計時間","days":[{"day":1,"title":"テーマ","spots":[{"time":"09:00","name":"名前","detail":"メモ","duration":"時間"}]}],"costs":{"transport":"移動費","admission":"入場料","meal":"食事代","total":"合計"},"tips":"コツ"}`;
 
   try {
     const geminiRes = await fetch(
@@ -49,7 +29,11 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.7, maxOutputTokens: 1200 }
+          generationConfig: { 
+            temperature: 0.7, 
+            maxOutputTokens: 1200,
+            responseMimeType: "application/json"
+          }
         })
       }
     );
