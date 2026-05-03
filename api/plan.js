@@ -8,18 +8,27 @@ export default async function handler(req, res) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'APIキーが設定されていません' });
 
-  const { spots, transport, days, people } = req.body;
+  const { spots, transport, days, people, arrivalPort, arrivalTime, departurePort, departureTime } = req.body;
 
-  const prompt = `あなたは壱岐島専門の旅行プランナーです。以下の条件で旅程を提案してください。
+  const prompt = `あなたは壱岐島専門の旅行プランナーです。以下の条件で現実的で楽しい旅程を提案してください。
 
 条件:
-- スポット: ${spots.map(s => `${s.name}(${s.area},${s.time}分,¥${s.fee})`).join('、')}
+- 到着: ${arrivalPort}（${arrivalTime}頃到着）
+- 出発: ${departurePort}（最終出発 ${departureTime}）
+- 選択スポット: ${spots.map(s => `${s.name}(所要${s.time}分,料金:${s.fee||'確認要'})`).join('、')}
 - 移動手段: ${transport}
 - 日数: ${days}
 - 人数: ${people}名
 
-以下のJSONを返してください。JSONのみ、余分なテキストなし:
-{"summary":"説明25字以内","totalTime":"合計時間","days":[{"day":1,"title":"テーマ","spots":[{"time":"09:00","name":"名前","detail":"メモ","duration":"時間"}]}],"costs":{"transport":"移動費","admission":"入場料","meal":"食事代","total":"合計"},"tips":"コツ"}`;
+重要なルール:
+- 到着時刻から行動開始すること
+- 最終日は${departureTime}までに出発港に戻ること（移動時間を考慮して余裕を持って）
+- 宿泊がある場合はチェックインを17:00頃に設定すること
+- スポット間の移動時間も考慮すること（レンタカーなら島内15〜25分程度）
+- 現実的に回れるスポット数に絞ること
+
+以下のJSONのみ返してください（余分なテキスト不要）:
+{"summary":"プランの一言説明（25字以内）","totalTime":"行動可能時間","days":[{"day":1,"title":"テーマ（10字以内）","spots":[{"time":"09:00","name":"スポット名","detail":"ポイント（20字以内）","duration":"約XX分"}]}],"costs":{"transport":"移動費概算（1名）","admission":"入場料合計（1名）","meal":"食事代概算（1名）","total":"合計目安（${people}名分）"},"tips":"旅のコツ（40字以内）"}`;
 
   try {
     const geminiRes = await fetch(
@@ -29,10 +38,7 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { 
-            temperature: 0.7, 
-            maxOutputTokens: 8192,
-          }
+          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
         })
       }
     );
