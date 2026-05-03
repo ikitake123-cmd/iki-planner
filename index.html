@@ -14,11 +14,24 @@
 }
 body { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif; background: var(--bg-surface); color: var(--text); min-height: 100vh; }
 .container { max-width: 760px; margin: 0 auto; padding: 2rem 1rem 4rem; }
-.hero { text-align: center; padding: 3rem 1rem 2.5rem; background: linear-gradient(160deg,#0a5c43 0%,#1D9E75 60%,#5DCAA5 100%); color: white; border-radius: var(--radius-lg); margin-bottom: 2rem; }
+.hero { text-align: center; padding: 2.5rem 1rem 2rem; background: linear-gradient(160deg,#0a5c43 0%,#1D9E75 60%,#5DCAA5 100%); color: white; border-radius: var(--radius-lg); margin-bottom: 2rem; }
 .hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 0.5rem; }
 .hero p { font-size: 14px; opacity: 0.85; }
 .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem; }
 .card-title { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+
+/* IN/OUT セクション */
+.inout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.inout-col { background: var(--bg-surface); border-radius: var(--radius); padding: 1rem; }
+.inout-label { font-size: 12px; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px; }
+.inout-label.in { color: #1D9E75; }
+.inout-label.out { color: #E07A30; }
+.inout-arrow { font-size: 16px; }
+.select-row { margin-bottom: 8px; }
+.select-row label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 3px; }
+.select-row select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; background: var(--bg); color: var(--text); }
+
+/* スポット */
 .cat-section { margin-bottom: 1.25rem; }
 .cat-label { font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 20px; display: inline-block; margin-bottom: 8px; }
 .spots-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(130px,1fr)); gap: 7px; }
@@ -29,12 +42,16 @@ body { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',s
 .spot-icon { font-size: 16px; margin-bottom: 3px; }
 .spot-name { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 2px; }
 .spot-meta { font-size: 10px; color: var(--text-hint); }
+
+/* 条件 */
 .config-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .config-item label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
 .config-item select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; background: var(--bg); color: var(--text); }
+
 .plan-btn { width: 100%; padding: 14px; background: var(--green); color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.15s,transform 0.1s; margin-bottom: 1.25rem; }
 .plan-btn:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-1px); }
 .plan-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
 .result-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; }
 .result-placeholder { text-align: center; padding: 2rem; color: var(--text-hint); font-size: 14px; }
 .loading { display: flex; gap: 6px; justify-content: center; align-items: center; padding: 2rem; }
@@ -42,6 +59,7 @@ body { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',s
 .loading span:nth-child(2) { animation-delay: 0.2s; }
 .loading span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1} }
+
 .plan-summary { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
 .plan-summary-title { font-size: 16px; font-weight: 700; }
 .pills { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -50,6 +68,7 @@ body { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',s
 .stop { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
 .stop-time { font-size: 11px; color: var(--text-hint); min-width: 38px; padding-top: 3px; }
 .stop-body { flex: 1; background: var(--bg-surface); border-radius: var(--radius); padding: 8px 12px; border-left: 3px solid var(--green); }
+.stop-body.port { border-left-color: #E07A30; }
 .stop-name { font-size: 13px; font-weight: 700; }
 .stop-detail { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 .cost-box { background: var(--bg-surface); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 1.25rem; }
@@ -60,7 +79,11 @@ body { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',s
 .error { background: #FCEBEB; border: 1px solid #F7C1C1; border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: #A32D2D; line-height: 1.6; }
 .sel-count { font-size: 12px; color: var(--text-muted); margin-top: 0.75rem; }
 .sel-count strong { color: var(--green); }
-@media (max-width: 480px) { .config-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 20px; } }
+@media (max-width: 540px) {
+  .config-grid { grid-template-columns: 1fr; }
+  .inout-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 20px; }
+}
 </style>
 </head>
 <body>
@@ -69,11 +92,70 @@ body { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',s
     <h1>🌊 壱岐島 旅程プランナー</h1>
     <p>行きたいスポットを選ぶだけで、AIが最適な旅程を提案します</p>
   </div>
+
+  <!-- IN/OUT -->
+  <div class="card">
+    <p class="card-title">到着・出発の情報</p>
+    <div class="inout-grid">
+      <div class="inout-col">
+        <div class="inout-label in">🛳 到着（IN）</div>
+        <div class="select-row">
+          <label>到着港・空港</label>
+          <select id="arrival-port">
+            <option value="郷ノ浦港">郷ノ浦港（博多/唐津フェリー）</option>
+            <option value="芦辺港">芦辺港（博多ジェットフォイル）</option>
+            <option value="印通寺港">印通寺港（唐津フェリー）</option>
+            <option value="壱岐空港">壱岐空港（長崎便）</option>
+          </select>
+        </div>
+        <div class="select-row">
+          <label>到着時刻</label>
+          <select id="arrival-time">
+            <option value="7:30">7:30頃</option>
+            <option value="8:00">8:00頃</option>
+            <option value="8:30">8:30頃</option>
+            <option value="9:00" selected>9:00頃</option>
+            <option value="9:30">9:30頃</option>
+            <option value="10:00">10:00頃</option>
+            <option value="11:00">11:00頃</option>
+            <option value="12:00">12:00頃</option>
+            <option value="13:00">13:00頃</option>
+            <option value="14:00">14:00頃</option>
+          </select>
+        </div>
+      </div>
+      <div class="inout-col">
+        <div class="inout-label out">🛳 出発（OUT）</div>
+        <div class="select-row">
+          <label>出発港・空港</label>
+          <select id="departure-port">
+            <option value="郷ノ浦港">郷ノ浦港（博多/唐津フェリー）</option>
+            <option value="芦辺港">芦辺港（博多ジェットフォイル）</option>
+            <option value="印通寺港">印通寺港（唐津フェリー）</option>
+            <option value="壱岐空港">壱岐空港（長崎便）</option>
+          </select>
+        </div>
+        <div class="select-row">
+          <label>最終出発時刻（最終日）</label>
+          <select id="departure-time">
+            <option value="17:00">17:00（JFT最終）</option>
+            <option value="17:45">17:45（フェリー最終）</option>
+            <option value="18:00">18:00頃</option>
+            <option value="翌朝">翌朝（最終日なし）</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- スポット選択 -->
   <div class="card">
     <p class="card-title">観光スポットを選んでください（複数選択可）</p>
     <div id="spots-container"></div>
     <p class="sel-count" id="sel-count"><strong>0件</strong>選択中</p>
   </div>
+
+  <!-- 旅行条件 -->
   <div class="card">
     <p class="card-title">旅行条件</p>
     <div class="config-grid">
@@ -105,11 +187,14 @@ body { font-family: 'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',s
       </div>
     </div>
   </div>
+
   <button class="plan-btn" id="plan-btn" disabled onclick="generatePlan()">スポットを選択してください</button>
+
   <div class="result-card" id="result">
     <p class="result-placeholder">✈️ スポットを選んで旅程を作成してください</p>
   </div>
 </div>
+
 <script>
 const CATEGORIES = [
   { id: "scenic",      label: "🏔 景勝地",    color: "#E8F4FD", border: "#90C8F0" },
@@ -121,80 +206,71 @@ const CATEGORIES = [
   { id: "shrine",      label: "⛩ 神社",       color: "#F0F7EE", border: "#8DC87A" },
 ];
 const SPOTS = [
-  // 景勝地
-  { id:"saruku",         name:"猿岩",            icon:"🪨", time:30, fee:"無料",                      cat:"scenic" },
-  { id:"oninoashiato",   name:"鬼の足跡",         icon:"🌊", time:30, fee:"無料",                      cat:"scenic" },
-  { id:"leftos",         name:"左京鼻",           icon:"🌄", time:30, fee:"無料",                      cat:"scenic" },
-  { id:"takenotsuji",    name:"岳ノ辻展望台",     icon:"🗻", time:45, fee:"無料",                      cat:"scenic" },
-  { id:"kurosakihohdai", name:"黒崎砲台跡",       icon:"🏰", time:40, fee:"無料",                      cat:"scenic" },
-  { id:"dodaiishi",      name:"壱岐の土台石",     icon:"🪨", time:20, fee:"無料",                      cat:"scenic" },
-  { id:"katsumoto",      name:"勝本城跡",         icon:"🏯", time:30, fee:"無料",                      cat:"scenic" },
-  { id:"jagatani",       name:"蛇ヶ谷",           icon:"🌿", time:30, fee:"無料",                      cat:"scenic" },
-  // 海・ビーチ
-  { id:"tsutsukihama",   name:"筒城浜",           icon:"🏖", time:90, fee:"無料",                      cat:"beach" },
-  { id:"nishihama",      name:"錦浜",             icon:"🏝", time:60, fee:"無料",                      cat:"beach" },
-  { id:"ohama",          name:"大浜",             icon:"🌊", time:60, fee:"無料",                      cat:"beach" },
-  { id:"kiyoishihama",   name:"清石浜",           icon:"🐚", time:60, fee:"無料",                      cat:"beach" },
-  { id:"satohama",       name:"里浜",             icon:"🏄", time:60, fee:"無料",                      cat:"beach" },
-  { id:"tatsunoshima",   name:"辰の島（渡船のみ）", icon:"🏝", time:120, fee:"大人1000円・小人500円",   cat:"beach" },
-  { id:"twins",          name:"ツインズビーチ",   icon:"🌅", time:45, fee:"無料",                      cat:"beach" },
-  // 観光
-  { id:"haranotsuji",    name:"原の辻遺跡",       icon:"🏛", time:60, fee:"無料",                      cat:"sightseeing" },
-  { id:"ikikoku",        name:"一支国博物館",      icon:"🏛", time:90, fee:"一般410円・高校生310円・小中学生210円", cat:"sightseeing" },
-  { id:"iruka",          name:"壱岐イルカパーク",  icon:"🐬", time:120, fee:"大人1000円・中学生以下500円・未就学児無料", cat:"sightseeing" },
-  { id:"harahoge",       name:"はらほげ地蔵",     icon:"🪷", time:20, fee:"無料",                      cat:"sightseeing" },
-  { id:"tatsu_cruise",   name:"辰の島遊覧",       icon:"🚢", time:60, fee:"大人2000円・小人1000円",     cat:"sightseeing" },
-  { id:"ajisai",         name:"壱岐あじさいパーク", icon:"💐", time:60, fee:"大人300円・小中学生200円・幼児無料", cat:"sightseeing" },
-  { id:"olive",          name:"壱岐オリーブ園",   icon:"🫒", time:45, fee:"無料",                      cat:"sightseeing" },
-  { id:"banana",         name:"バナナファーム壱岐", icon:"🍌", time:60, fee:"無料",                     cat:"sightseeing" },
-  // 古墳
-  { id:"oninokukuri",    name:"鬼の窟古墳",       icon:"🗿", time:20, fee:"無料",                      cat:"kofun" },
-  { id:"sugoroku",       name:"双六古墳",         icon:"🗿", time:20, fee:"無料",                      cat:"kofun" },
-  { id:"kakeki",         name:"掛貴古墳",         icon:"🗿", time:20, fee:"無料",                      cat:"kofun" },
-  // お酒
-  { id:"genkai",         name:"玄海酒造",         icon:"🍶", time:45, fee:"",                          cat:"sake" },
-  { id:"ikinokura",      name:"壱岐の蔵酒造",     icon:"🍶", time:45, fee:"",                          cat:"sake" },
-  { id:"ikinohana",      name:"壱岐の華",         icon:"🍶", time:45, fee:"",                          cat:"sake" },
-  { id:"sarukawa",       name:"猿川伊豆酒造",     icon:"🍶", time:45, fee:"",                          cat:"sake" },
-  { id:"yamanomori",     name:"山の守酒造",       icon:"🍶", time:45, fee:"",                          cat:"sake" },
-  { id:"amanokawa",      name:"天の川酒造",       icon:"🍶", time:45, fee:"",                          cat:"sake" },
-  { id:"omoya",          name:"重家酒造",         icon:"🍶", time:45, fee:"",                          cat:"sake" },
-  { id:"islandbrew",     name:"アイランドブルワリー", icon:"🍺", time:45, fee:"",                      cat:"sake" },
-  // 温泉
-  { id:"yunomoto",       name:"湯本温泉",         icon:"♨", time:60, fee:"",                           cat:"onsen" },
-  { id:"yukawa",         name:"湯川温泉",         icon:"♨", time:60, fee:"",                           cat:"onsen" },
-  // 神社
-  { id:"tsukiyomi",      name:"月讀神社",         icon:"⛩", time:30, fee:"無料",                      cat:"shrine" },
-  { id:"otake",          name:"男岳神社",         icon:"⛩", time:30, fee:"無料",                      cat:"shrine" },
-  { id:"metake",         name:"女岳神社",         icon:"⛩", time:20, fee:"無料",                      cat:"shrine" },
-  { id:"sumiyoshi",      name:"住吉神社",         icon:"⛩", time:30, fee:"無料",                      cat:"shrine" },
-  { id:"ikijinja",       name:"壱岐神社",         icon:"⛩", time:20, fee:"無料",                      cat:"shrine" },
-  { id:"ojima",          name:"小島神社",         icon:"🌊", time:45, fee:"無料",                      cat:"shrine" },
-  { id:"tentagao",       name:"天手長男神社",     icon:"⛩", time:20, fee:"無料",                      cat:"shrine" },
-  { id:"seibomiya",      name:"聖母宮",           icon:"⛩", time:20, fee:"無料",                      cat:"shrine" },
-  { id:"saegami",        name:"塞神社",           icon:"⛩", time:20, fee:"無料",                      cat:"shrine" },
-  { id:"ryuja",          name:"龍蛇神社",         icon:"🐍", time:20, fee:"無料",                      cat:"shrine" },
-  { id:"shirasuna",      name:"白沙八幡神社",     icon:"⛩", time:20, fee:"無料",                      cat:"shrine" },
+  { id:"saruku",         name:"猿岩",              icon:"🪨", time:30,  fee:"無料",                                  cat:"scenic" },
+  { id:"oninoashiato",   name:"鬼の足跡",           icon:"🌊", time:30,  fee:"無料",                                  cat:"scenic" },
+  { id:"leftos",         name:"左京鼻",             icon:"🌄", time:30,  fee:"無料",                                  cat:"scenic" },
+  { id:"takenotsuji",    name:"岳ノ辻展望台",       icon:"🗻", time:45,  fee:"無料",                                  cat:"scenic" },
+  { id:"kurosakihohdai", name:"黒崎砲台跡",         icon:"🏰", time:40,  fee:"無料",                                  cat:"scenic" },
+  { id:"dodaiishi",      name:"壱岐の土台石",       icon:"🪨", time:20,  fee:"無料",                                  cat:"scenic" },
+  { id:"katsumoto",      name:"勝本城跡",           icon:"🏯", time:30,  fee:"無料",                                  cat:"scenic" },
+  { id:"jagatani",       name:"蛇ヶ谷",             icon:"🌿", time:30,  fee:"無料",                                  cat:"scenic" },
+  { id:"tsutsukihama",   name:"筒城浜",             icon:"🏖", time:90,  fee:"無料",                                  cat:"beach" },
+  { id:"nishihama",      name:"錦浜",               icon:"🏝", time:60,  fee:"無料",                                  cat:"beach" },
+  { id:"ohama",          name:"大浜",               icon:"🌊", time:60,  fee:"無料",                                  cat:"beach" },
+  { id:"kiyoishihama",   name:"清石浜",             icon:"🐚", time:60,  fee:"無料",                                  cat:"beach" },
+  { id:"satohama",       name:"里浜",               icon:"🏄", time:60,  fee:"無料",                                  cat:"beach" },
+  { id:"tatsunoshima",   name:"辰の島（渡船のみ）", icon:"🏝", time:120, fee:"大人1000円・小人500円",                  cat:"beach" },
+  { id:"twins",          name:"ツインズビーチ",     icon:"🌅", time:45,  fee:"無料",                                  cat:"beach" },
+  { id:"haranotsuji",    name:"原の辻遺跡",         icon:"🏛", time:60,  fee:"無料",                                  cat:"sightseeing" },
+  { id:"ikikoku",        name:"一支国博物館",        icon:"🏛", time:90,  fee:"一般410円・高校生310円・小中学生210円",  cat:"sightseeing" },
+  { id:"iruka",          name:"壱岐イルカパーク",   icon:"🐬", time:120, fee:"大人1000円・中学生以下500円・未就学児無料", cat:"sightseeing" },
+  { id:"harahoge",       name:"はらほげ地蔵",       icon:"🪷", time:20,  fee:"無料",                                  cat:"sightseeing" },
+  { id:"tatsu_cruise",   name:"辰の島遊覧",         icon:"🚢", time:60,  fee:"大人2000円・小人1000円",                 cat:"sightseeing" },
+  { id:"ajisai",         name:"壱岐あじさいパーク", icon:"💐", time:60,  fee:"大人300円・小中学生200円・幼児無料",      cat:"sightseeing" },
+  { id:"olive",          name:"壱岐オリーブ園",     icon:"🫒", time:45,  fee:"無料",                                  cat:"sightseeing" },
+  { id:"banana",         name:"バナナファーム壱岐",  icon:"🍌", time:60,  fee:"無料",                                  cat:"sightseeing" },
+  { id:"oninokukuri",    name:"鬼の窟古墳",         icon:"🗿", time:20,  fee:"無料",                                  cat:"kofun" },
+  { id:"sugoroku",       name:"双六古墳",           icon:"🗿", time:20,  fee:"無料",                                  cat:"kofun" },
+  { id:"kakeki",         name:"掛貴古墳",           icon:"🗿", time:20,  fee:"無料",                                  cat:"kofun" },
+  { id:"genkai",         name:"玄海酒造",           icon:"🍶", time:45,  fee:"",                                      cat:"sake" },
+  { id:"ikinokura",      name:"壱岐の蔵酒造",       icon:"🍶", time:45,  fee:"",                                      cat:"sake" },
+  { id:"ikinohana",      name:"壱岐の華",           icon:"🍶", time:45,  fee:"",                                      cat:"sake" },
+  { id:"sarukawa",       name:"猿川伊豆酒造",       icon:"🍶", time:45,  fee:"",                                      cat:"sake" },
+  { id:"yamanomori",     name:"山の守酒造",         icon:"🍶", time:45,  fee:"",                                      cat:"sake" },
+  { id:"amanokawa",      name:"天の川酒造",         icon:"🍶", time:45,  fee:"",                                      cat:"sake" },
+  { id:"omoya",          name:"重家酒造",           icon:"🍶", time:45,  fee:"",                                      cat:"sake" },
+  { id:"islandbrew",     name:"アイランドブルワリー",icon:"🍺", time:45,  fee:"",                                      cat:"sake" },
+  { id:"yunomoto",       name:"湯本温泉",           icon:"♨",  time:60,  fee:"",                                      cat:"onsen" },
+  { id:"yukawa",         name:"湯川温泉",           icon:"♨",  time:60,  fee:"",                                      cat:"onsen" },
+  { id:"tsukiyomi",      name:"月讀神社",           icon:"⛩", time:30,  fee:"無料",                                  cat:"shrine" },
+  { id:"otake",          name:"男岳神社",           icon:"⛩", time:30,  fee:"無料",                                  cat:"shrine" },
+  { id:"metake",         name:"女岳神社",           icon:"⛩", time:20,  fee:"無料",                                  cat:"shrine" },
+  { id:"sumiyoshi",      name:"住吉神社",           icon:"⛩", time:30,  fee:"無料",                                  cat:"shrine" },
+  { id:"ikijinja",       name:"壱岐神社",           icon:"⛩", time:20,  fee:"無料",                                  cat:"shrine" },
+  { id:"ojima",          name:"小島神社",           icon:"🌊", time:45,  fee:"無料",                                  cat:"shrine" },
+  { id:"tentagao",       name:"天手長男神社",       icon:"⛩", time:20,  fee:"無料",                                  cat:"shrine" },
+  { id:"seibomiya",      name:"聖母宮",             icon:"⛩", time:20,  fee:"無料",                                  cat:"shrine" },
+  { id:"saegami",        name:"塞神社",             icon:"⛩", time:20,  fee:"無料",                                  cat:"shrine" },
+  { id:"ryuja",          name:"龍蛇神社",           icon:"🐍", time:20,  fee:"無料",                                  cat:"shrine" },
+  { id:"shirasuna",      name:"白沙八幡神社",       icon:"⛩", time:20,  fee:"無料",                                  cat:"shrine" },
 ];
 
 let selected = new Set();
 
 function renderSpots() {
-  const container = document.getElementById("spots-container");
-  container.innerHTML = CATEGORIES.map(cat => {
+  document.getElementById("spots-container").innerHTML = CATEGORIES.map(cat => {
     const catSpots = SPOTS.filter(s => s.cat === cat.id);
-    return `
-      <div class="cat-section">
-        <span class="cat-label" style="background:${cat.color};border:1px solid ${cat.border}">${cat.label}</span>
-        <div class="spots-grid">
-          ${catSpots.map(s => `
-            <div class="spot-card${selected.has(s.id) ? " selected" : ""}" onclick="toggleSpot('${s.id}')">
-              <div class="spot-icon">${s.icon}</div>
-              <div class="spot-name">${s.name}</div>
-              <div class="spot-meta">約${s.time}分${s.fee ? " · " + s.fee : ""}</div>
-            </div>`).join("")}
-        </div>
-      </div>`;
+    return `<div class="cat-section">
+      <span class="cat-label" style="background:${cat.color};border:1px solid ${cat.border}">${cat.label}</span>
+      <div class="spots-grid">
+        ${catSpots.map(s => `
+          <div class="spot-card${selected.has(s.id) ? " selected" : ""}" onclick="toggleSpot('${s.id}')">
+            <div class="spot-icon">${s.icon}</div>
+            <div class="spot-name">${s.name}</div>
+            <div class="spot-meta">約${s.time}分${s.fee ? " · " + s.fee : ""}</div>
+          </div>`).join("")}
+      </div>
+    </div>`;
   }).join("");
 }
 
@@ -212,19 +288,25 @@ async function generatePlan() {
   const btn = document.getElementById("plan-btn");
   btn.disabled = true;
   document.getElementById("result").innerHTML = `<div class="loading"><span></span><span></span><span></span></div>`;
+
   const transport = document.getElementById("transport").value;
   const days = document.getElementById("days").value;
   const people = document.getElementById("people").value;
+  const arrivalPort = document.getElementById("arrival-port").value;
+  const arrivalTime = document.getElementById("arrival-time").value;
+  const departurePort = document.getElementById("departure-port").value;
+  const departureTime = document.getElementById("departure-time").value;
   const spotList = SPOTS.filter(s => selected.has(s.id));
+
   try {
     const res = await fetch("/api/plan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ spots: spotList, transport, days, people })
+      body: JSON.stringify({ spots: spotList, transport, days, people, arrivalPort, arrivalTime, departurePort, departureTime })
     });
     if (!res.ok) { const err = await res.json(); throw new Error(err.error || `HTTP ${res.status}`); }
     const plan = await res.json();
-    renderPlan(plan, people);
+    renderPlan(plan, people, arrivalPort, arrivalTime, departurePort, departureTime);
   } catch(e) {
     document.getElementById("result").innerHTML = `<div class="error">⚠️ エラー: ${e.message}</div>`;
   }
@@ -232,20 +314,30 @@ async function generatePlan() {
   btn.textContent = `🗓 選択した${selected.size}スポットで旅程を作成`;
 }
 
-function renderPlan(plan, people) {
+function renderPlan(plan, people, arrivalPort, arrivalTime, departurePort, departureTime) {
   let html = `<div class="plan-summary">
     <div class="plan-summary-title">${plan.summary || "旅程プラン"}</div>
     <div class="pills">
-      ${plan.totalTime ? `<span class="pill">${plan.totalTime}</span>` : ""}
+      <span class="pill">🛳 ${arrivalPort} ${arrivalTime}着</span>
+      <span class="pill">🏁 ${departurePort} ${departureTime}発</span>
       <span class="pill">${people}名</span>
     </div>
   </div>`;
+
   (plan.days || []).forEach(d => {
     html += `<div class="day-header">Day ${d.day} — ${d.title}</div>`;
     (d.spots || []).forEach(s => {
-      html += `<div class="stop"><div class="stop-time">${s.time}</div><div class="stop-body"><div class="stop-name">${s.name}</div><div class="stop-detail">${s.detail} · ${s.duration}</div></div></div>`;
+      const isPort = s.name.includes("港") || s.name.includes("空港") || s.name.includes("チェックイン") || s.name.includes("チェックアウト");
+      html += `<div class="stop">
+        <div class="stop-time">${s.time}</div>
+        <div class="stop-body${isPort ? " port" : ""}">
+          <div class="stop-name">${s.name}</div>
+          <div class="stop-detail">${s.detail} · ${s.duration}</div>
+        </div>
+      </div>`;
     });
   });
+
   if (plan.costs) {
     html += `<div class="cost-box"><div class="cost-title">費用目安</div>
       <div class="cost-row"><span>移動費（1名）</span><span>${plan.costs.transport}</span></div>
