@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>壱岐島 GW旅程プランナー</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green: #1D9E75;
+  --green-dark: #0F6E56;
+  --green-light: #E1F5EE;
+  --text: #1a1a1a;
+  --text-muted: #666;
+  --text-hint: #999;
+  --border: #e5e5e5;
+  --bg: #ffffff;
+  --bg-surface: #f7f7f5;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+body {
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  background: var(--bg-surface);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.container { max-width: 720px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 3rem 1rem 2.5rem;
+  background: linear-gradient(160deg, #0a5c43 0%, #1D9E75 60%, #5DCAA5 100%);
+  color: white;
+  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  font-size: 12px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+.hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 0.5rem; }
+.hero p { font-size: 14px; opacity: 0.85; }
+
+/* Card */
+.card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+/* Spots grid */
+.spots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.spot-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg);
+  user-select: none;
+}
+.spot-card:hover { border-color: var(--green); background: var(--green-light); }
+.spot-card.selected { border: 2px solid var(--green); background: var(--green-light); }
+.spot-card.selected .spot-name { color: var(--green-dark); }
+.spot-icon { font-size: 18px; margin-bottom: 4px; }
+.spot-name { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 3px; }
+.spot-meta { font-size: 10px; color: var(--text-hint); }
+
+/* Config */
+.config-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.config-item label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+.config-item select {
+  width: 100%; padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--text);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+.config-item select:focus { outline: none; border-color: var(--green); }
+
+/* Button */
+.plan-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  margin-bottom: 1.25rem;
+}
+.plan-btn:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-1px); }
+.plan-btn:active:not(:disabled) { transform: translateY(0); }
+.plan-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* Result */
+.result-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+.result-placeholder {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-hint);
+  font-size: 14px;
+}
+.loading {
+  display: flex; gap: 6px; justify-content: center; align-items: center; padding: 2rem;
+}
+.loading span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green); animation: bounce 1.2s infinite;
+}
+.loading span:nth-child(2) { animation-delay: 0.2s; }
+.loading span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1} }
+
+/* Plan result */
+.plan-summary {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap; gap: 8px;
+}
+.plan-summary-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  font-size: 11px; padding: 3px 10px;
+  border-radius: 20px; border: 1px solid var(--border);
+  color: var(--text-muted); background: var(--bg-surface);
+}
+.day-header {
+  font-size: 12px; font-weight: 700; color: var(--green-dark);
+  background: var(--green-light); padding: 5px 12px;
+  border-radius: var(--radius); margin: 1rem 0 0.6rem;
+  display: inline-block;
+}
+.stop {
+  display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start;
+}
+.stop-time { font-size: 11px; color: var(--text-hint); min-width: 38px; padding-top: 3px; }
+.stop-body {
+  flex: 1; background: var(--bg-surface);
+  border-radius: var(--radius); padding: 8px 12px;
+  border-left: 3px solid var(--green);
+}
+.stop-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.stop-detail { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.cost-box {
+  background: var(--bg-surface); border-radius: var(--radius);
+  padding: 1rem 1.25rem; margin-top: 1.25rem;
+}
+.cost-title { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+.cost-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; color: var(--text-muted); }
+.cost-total {
+  display: flex; justify-content: space-between;
+  font-size: 16px; font-weight: 700; color: var(--text);
+  padding-top: 8px; margin-top: 6px;
+  border-top: 1px solid var(--border);
+}
+.tip {
+  margin-top: 1rem; padding: 10px 14px;
+  background: #FAEEDA; border-radius: var(--radius);
+  font-size: 12px; color: #633806; line-height: 1.6;
+}
+
+.error {
+  background: #FCEBEB; border: 1px solid #F7C1C1;
+  border-radius: var(--radius); padding: 12px 16px;
+  font-size: 13px; color: #A32D2D; line-height: 1.6;
+}
+
+/* Selected count */
+.sel-count { font-size: 12px; color: var(--text-muted); margin-top: 0.75rem; }
+.sel-count strong { color: var(--green); }
+
+@media (max-width: 480px) {
+  .config-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 20px; }
+  .spots-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-badge">壱岐島 GW旅行 · AI旅程プランナー</div>
+    <h1>🌊 壱岐島 旅程プランナー</h1>
+    <p>行きたいスポットを選ぶだけで、AIが最適な旅程を提案します</p>
+  </div>
+
+  <div class="card">
+    <p class="card-title">観光スポットを選んでください（複数選択可）</p>
+    <div class="spots-grid" id="spots-grid"></div>
+    <p class="sel-count" id="sel-count"><strong>0件</strong>選択中</p>
+  </div>
+
+  <div class="card">
+    <p class="card-title">旅行条件</p>
+    <div class="config-grid">
+      <div class="config-item">
+        <label>移動手段</label>
+        <select id="transport">
+          <option value="レンタカー">レンタカー</option>
+          <option value="路線バス・タクシー">路線バス・タクシー</option>
+          <option value="レンタルバイク">レンタルバイク</option>
+          <option value="レンタサイクル">レンタサイクル</option>
+        </select>
+      </div>
+      <div class="config-item">
+        <label>旅行日数</label>
+        <select id="days">
+          <option value="日帰り（1日）">日帰り</option>
+          <option value="1泊2日" selected>1泊2日</option>
+          <option value="2泊3日">2泊3日</option>
+        </select>
+      </div>
+      <div class="config-item">
+        <label>人数</label>
+        <select id="people">
+          <option value="1">1名</option>
+          <option value="2" selected>2名</option>
+          <option value="3">3名</option>
+          <option value="4">4名以上</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <button class="plan-btn" id="plan-btn" disabled onclick="generatePlan()">
+    スポットを選択してください
+  </button>
+
+  <div class="result-card" id="result">
+    <p class="result-placeholder">✈️ スポットを選んで旅程を作成してください</p>
+  </div>
+
+</div>
+
+<script>
+const SPOTS = [
+  { id: "tsutsukihama", name: "筒城浜海水浴場", icon: "🏖", time: 90, fee: 0, area: "東部" },
+  { id: "saruku", name: "猿岩", icon: "🪨", time: 30, fee: 0, area: "北部" },
+  { id: "haranotsuji", name: "原の辻遺跡", icon: "🏛", time: 60, fee: 0, area: "中央" },
+  { id: "ikikoku", name: "一支国博物館", icon: "🗿", time: 90, fee: 600, area: "中央" },
+  { id: "tsukiyomi", name: "月讀神社", icon: "⛩", time: 30, fee: 0, area: "中央" },
+  { id: "ojima", name: "小島神社（干潮時）", icon: "🌊", time: 45, fee: 0, area: "南部" },
+  { id: "leftos", name: "左京鼻", icon: "🌄", time: 30, fee: 0, area: "南部" },
+  { id: "himesaki", name: "姫前神社", icon: "⛩", time: 20, fee: 0, area: "東部" },
+  { id: "onsen", name: "壱岐温泉（湯ノ本）", icon: "♨", time: 90, fee: 400, area: "中央" },
+  { id: "shochu", name: "玄海酒造（蔵見学）", icon: "🍶", time: 60, fee: 300, area: "東部" },
+  { id: "tsurugisaki", name: "剣崎灯台", icon: "🔦", time: 30, fee: 0, area: "南部" },
+  { id: "fishing", name: "壱岐の海釣り体験", icon: "🎣", time: 180, fee: 5000, area: "各所" },
+];
+
+let selected = new Set();
+
+function renderSpots() {
+  document.getElementById("spots-grid").innerHTML = SPOTS.map(s => `
+    <div class="spot-card${selected.has(s.id) ? " selected" : ""}" onclick="toggleSpot('${s.id}')">
+      <div class="spot-icon">${s.icon}</div>
+      <div class="spot-name">${s.name}</div>
+      <div class="spot-meta">${s.area} · 約${s.time}分${s.fee ? " · ¥" + s.fee.toLocaleString() : ""}</div>
+    </div>`).join("");
+}
+
+function toggleSpot(id) {
+  selected.has(id) ? selected.delete(id) : selected.add(id);
+  renderSpots();
+  const n = selected.size;
+  document.getElementById("sel-count").innerHTML = `<strong>${n}件</strong>選択中`;
+  const btn = document.getElementById("plan-btn");
+  btn.disabled = n === 0;
+  btn.textContent = n > 0 ? `🗓 選択した${n}スポットで旅程を作成` : "スポットを選択してください";
+}
+
+async function generatePlan() {
+  const btn = document.getElementById("plan-btn");
+  btn.disabled = true;
+  document.getElementById("result").innerHTML = `<div class="loading"><span></span><span></span><span></span></div>`;
+
+  const transport = document.getElementById("transport").value;
+  const days = document.getElementById("days").value;
+  const people = document.getElementById("people").value;
+  const spotList = SPOTS.filter(s => selected.has(s.id));
+
+  try {
+    const res = await fetch("/api/plan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ spots: spotList, transport, days, people })
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || `HTTP ${res.status}`);
+    }
+    const plan = await res.json();
+    renderPlan(plan, people);
+  } catch(e) {
+    document.getElementById("result").innerHTML =
+      `<div class="error">⚠️ エラー: ${e.message}</div>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = `🗓 選択した${selected.size}スポットで旅程を作成`;
+}
+
+function renderPlan(plan, people) {
+  let html = `<div class="plan-summary">
+    <div class="plan-summary-title">${plan.summary || "旅程プラン"}</div>
+    <div class="pills">
+      ${plan.totalTime ? `<span class="pill">${plan.totalTime}</span>` : ""}
+      <span class="pill">${people}名</span>
+    </div>
+  </div>`;
+
+  (plan.days || []).forEach(d => {
+    html += `<div class="day-header">Day ${d.day} — ${d.title}</div>`;
+    (d.spots || []).forEach(s => {
+      html += `<div class="stop">
+        <div class="stop-time">${s.time}</div>
+        <div class="stop-body">
+          <div class="stop-name">${s.name}</div>
+          <div class="stop-detail">${s.detail} · ${s.duration}</div>
+        </div>
+      </div>`;
+    });
+  });
+
+  if (plan.costs) {
+    html += `<div class="cost-box">
+      <div class="cost-title">費用目安</div>
+      <div class="cost-row"><span>移動費（1名）</span><span>${plan.costs.transport}</span></div>
+      <div class="cost-row"><span>入場料（1名）</span><span>${plan.costs.admission}</span></div>
+      <div class="cost-row"><span>食事代（1名）</span><span>${plan.costs.meal}</span></div>
+      <div class="cost-total"><span>合計（${people}名）</span><span>${plan.costs.total}</span></div>
+    </div>`;
+  }
+
+  if (plan.tips) {
+    html += `<div class="tip">💡 ${plan.tips}</div>`;
+  }
+
+  document.getElementById("result").innerHTML = html;
+}
+
+renderSpots();
+</script>
+</body>
+</html>
